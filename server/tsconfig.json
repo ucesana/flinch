@@ -1,0 +1,14 @@
+// server/tsconfig.json
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "outDir": "../build/ws-server",
+    "noEmit": false
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

@@ -1,15 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+@variant dark (&:where(.dark, .dark *));
+html {
+  @apply bg-white dark:bg-gray-800;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+@layer components {
+  /* 
+   * Note: All custom Tailwindcss utility classes *must* be prefixed with `flinch-`.
+   */
+
+  .flinch-focus {
+    @apply focus-visible:outline-2 focus-visible:outline-red-500 focus-visible:rounded-lg;
   }
+
+  .flinch-has-focus {
+    @apply has-focus-visible:outline-2 has-focus-visible:outline-red-500 has-focus-visible:rounded-lg;
+  }
+}
+
+@keyframes pulsate-fwd {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(1.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@utility animate-pulsate {
+  animation: pulsate-fwd 1s cubic-bezier(1, 0, 0, 1) 1;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
 }
