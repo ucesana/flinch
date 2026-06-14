@@ -23,6 +23,10 @@ html {
   .flinch-has-focus {
     @apply has-focus-visible:outline-2 has-focus-visible:outline-red-500 has-focus-visible:rounded-lg;
   }
+
+  .flinch-error {
+    @apply pt-4 dark:text-white
+  }
 }
 
 @keyframes pulsate-fwd {

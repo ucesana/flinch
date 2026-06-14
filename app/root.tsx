@@ -9,8 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import SignupModal from "./components/signup-modal";
-import { useState } from "react";
+import ModalOutlet from "~/components/modal-outlet";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,14 +43,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   return (
     <>
       <Outlet />
-      <SignupModal
-        isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
-      />
+      <ModalOutlet />
     </>
   );
 }

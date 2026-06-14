@@ -5,8 +5,19 @@ import ButtonIcon from "./button-icon";
 import ResponsiveSearchInput from "./search-input.responsive";
 import LinkResponsive from "./link.responsive";
 import Menu from "./menu";
+import { useModal } from "~/components/modal";
+import type { ModalType } from "~/components/modal-outlet";
+import { logout } from "~/services/auth.service";
 
 export default function Navigation() {
+  const { openModal } = useModal<ModalType>();
+
+  function handleLogOut() {
+    logout().then((_) => {
+      console.log("logged out");
+    });
+  }
+
   return (
     <nav className="flex dark:text-white p-2 shadow-lg shadow-gray-950">
       <div className="flex gap-x-2 items-center">
@@ -33,10 +44,13 @@ export default function Navigation() {
       </div>
 
       <div className="flex justify-end items-center pl-2 gap-x-2">
-        <Button aria-description="Log In">Log In</Button>
+        <Button aria-description="Log In" onClick={openModal("login")}>
+          Log In
+        </Button>
         <Button
           area-description="Sign Up"
           className="bg-red-600 hover:bg-red-500"
+          onClick={openModal("signup")}
         >
           Sign Up
         </Button>
@@ -45,7 +59,7 @@ export default function Navigation() {
             <a href="channel">Channel</a>
             <a href="settings">Settings</a>
             <a href="login">Log In</a>
-            <a href="logout">Log Out</a>
+            <a onClick={handleLogOut}>Log Out</a>
           </Menu>
         </ButtonIcon>
       </div>

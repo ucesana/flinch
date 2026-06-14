@@ -1,20 +1,20 @@
 import Modal, { type ModalConfig } from "./modal";
 import type { SubmitHandler } from "react-hook-form";
 
-export type SignUpFields = {
+export type LogInFields = {
   email: string;
   password: string;
 };
 
-interface SignUpModalProps<SignupFields extends Record<string, unknown>> {
+interface LogInModalProps<SignupFields extends Record<string, unknown>> {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: SubmitHandler<SignupFields>;
 }
 
-const signupModalConfig: ModalConfig<SignUpFields> = {
-  title: "Create Account",
-  submitLabel: "Sign Up",
+const loginModalConfig: ModalConfig<LogInFields> = {
+  title: "Log In",
+  submitLabel: "Log In",
   fields: [
     {
       id: "email",
@@ -36,28 +36,21 @@ const signupModalConfig: ModalConfig<SignUpFields> = {
       placeholder: "Password",
       validation: {
         required: "Please enter a password",
-        minLength: { value: 8, message: "Must be at least 8 characters" },
-        maxLength: { value: 64, message: "Must be at most 64 characters" },
-        pattern: {
-          value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&*])(?!.*\s).+$/,
-          message:
-            "Must include uppercase, lowercase, a digit, and a special character (! @ # $ % & *)",
-        },
       },
     },
   ],
 };
 
-export default function SignUpModal({
+export default function LogInModal({
   isOpen,
   onClose,
   onSubmit: onSignUp,
-}: SignUpModalProps<SignUpFields>) {
+}: LogInModalProps<LogInFields>) {
   return (
-    <Modal<SignUpFields>
+    <Modal<LogInFields>
       isOpen={isOpen}
       onClose={onClose}
-      config={signupModalConfig}
+      config={loginModalConfig}
       onSubmit={onSignUp}
     />
   );
