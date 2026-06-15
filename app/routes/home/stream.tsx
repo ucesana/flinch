@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import Button from "../../components/button";
 import { toast } from "sonner";
 
+// const INGEST_URL = "ws://localhost:8080/ingest";
 const INGEST_URL = "ws://localhost:8080/api/streams/live/ingest";
 
 export default function Stream() {
