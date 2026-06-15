@@ -2,8 +2,11 @@ import { useEffect, useRef } from "react";
 import Button from "../../components/button";
 import { toast } from "sonner";
 
+const INGEST_URL = "ws://localhost:8080/api/streams/live/ingest";
+
 export default function Stream() {
-  const bitsPerSecond = 100_000_000;
+  // const BITS_PER_SECOND = 100_000_000;
+  const BITS_PER_SECOND = 2_500_000; // 2.5 Mbps — sufficient for 1080p VP8
   const video = useRef<HTMLVideoElement>(null);
   let mimeType: string | undefined;
 
@@ -35,7 +38,7 @@ export default function Stream() {
     console.log("Mime type", mimeType);
     recorder = new MediaRecorder(stream, {
       mimeType: mimeType,
-      videoBitsPerSecond: bitsPerSecond,
+      videoBitsPerSecond: BITS_PER_SECOND,
     });
 
     console.log("Recorder created, state:", recorder.state);
@@ -58,7 +61,7 @@ export default function Stream() {
   }
 
   function connectProducer(stream: MediaStream) {
-    const ws = new WebSocket("ws://localhost:8080/ingest");
+    const ws = new WebSocket(INGEST_URL);
     ws.binaryType = "arraybuffer";
 
     ws.onopen = () => {

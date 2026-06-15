@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 
+const CONSUME_URL = "ws://localhost:8080/api/streams/live/consume";
+
 export default function Watch() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -100,7 +102,7 @@ export default function Watch() {
           console.error("Video error:", video.error);
         });
 
-        const ws = new WebSocket("ws://localhost:8080/consume");
+        const ws = new WebSocket(CONSUME_URL);
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => console.log("ws open");
