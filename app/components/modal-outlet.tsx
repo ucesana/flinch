@@ -8,31 +8,44 @@ import {
   register,
 } from "~/services/account.service";
 import { login, type TokensResponse } from "~/services/auth.service";
+import { useAppDispatch } from "~/store/hooks";
+import { setIdentity } from "~/store/identitySlice";
 
 export type ModalType = "signup" | "login";
 
 export default function ModalOutlet() {
-  const { closeModal, isModalOpen } = useModal<ModalType>();
+  const { closeModal, openModal, isModalOpen } = useModal<ModalType>();
+
+  const dispatch = useAppDispatch();
 
   function onSignUp({ email, password }: SignUpFields) {
     register({ email, password }).then((account: AccountResponse) => {
       console.log("Registered:", account);
       closeModal();
+      openModal("login");
     });
   }
 
-  function onLogin({ email, password }: LogInFields) {
-    login({ email, password }).then((token: TokensResponse) => {
-      console.log("token", token);
+  async function onLogin({ email, password }: LogInFields) {
+    // login({ email, password }).then((tokens: TokensResponse) => {
+    //   console.log("tokens", tokens);
+    //
+    //   getAccount().then((account) => {
+    //     console.log("account", account);
+    //   });
+    //
+    //   getCurrentSession().then((session) => {
+    //     console.log("session", session);
+    //   });
+    // });
+    const tokens = await login({ email, password });
+    console.log("tokens", tokens);
+    const account = await getAccount();
+    console.log("account", account);
+    const session = await getCurrentSession();
+    console.log("session", session);
+    dispatch(setIdentity({ account, session }));
 
-      getAccount().then((account) => {
-        console.log("account", account);
-      });
-
-      getCurrentSession().then((session) => {
-        console.log("session", session);
-      });
-    });
     closeModal();
   }
 
