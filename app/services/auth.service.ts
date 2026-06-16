@@ -1,4 +1,6 @@
 import { post } from "./rest.service";
+import { request } from "~/services/request.service";
+import { getDeviceId, HEADER_DEVICE_ID_KEY } from "~/lib/web";
 
 export interface LoginRequest {
   email: string;
@@ -13,7 +15,10 @@ export interface TokensResponse {
 }
 
 export const login = (loginRequest: LoginRequest): Promise<TokensResponse> => {
-  return post("/api/auth/login", loginRequest);
+  return request("POST", "/api/auth/login", {
+    body: loginRequest,
+    headers: { [HEADER_DEVICE_ID_KEY]: getDeviceId() },
+  });
 };
 
 interface RefreshTokenRequest {

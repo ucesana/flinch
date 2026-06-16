@@ -1,4 +1,4 @@
-import { post, get } from "./rest.service";
+import { post, get, remove } from "./rest.service";
 
 export interface RegistrationRequest {
   email: string;
@@ -24,10 +24,39 @@ export function getAccount(): Promise<AccountResponse> {
   return get<AccountResponse>("/api/accounts/me");
 }
 
-export interface Pulse {
+export interface UserResponse {
+  userId: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  roles: string[];
+}
+
+export interface SessionResponse {
+  familyId: string;
+  user: UserResponse;
+  deviceId: string;
+  deviceName: string;
+  createdAt: string;
+  lastUsedAt: string;
+}
+
+export function getSessions(): Promise<SessionResponse[]> {
+  return get<SessionResponse[]>("/api/accounts/me/sessions");
+}
+
+export function getCurrentSession(): Promise<SessionResponse> {
+  return get<SessionResponse>("/api/accounts/me/sessions/current");
+}
+
+export function revokeSession(familyId: string): Promise<void> {
+  return remove(`/api/accounts/me/sessions/${familyId}`);
+}
+
+export interface PulseResponse {
   status: string;
 }
 
-export function healthCheck(): Promise<Pulse> {
-  return get<Pulse>("/api/accounts/health");
+export function healthCheck(): Promise<PulseResponse> {
+  return get<PulseResponse>("/api/accounts/health");
 }

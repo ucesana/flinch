@@ -1,5 +1,12 @@
-import { url } from "~/util/web.util";
-import { serialise } from "~/util/json.util";
+import { url } from "~/lib/web";
+import { serialise } from "~/lib/json";
+
+export type THeaders = Record<string, string>;
+
+export type TRequestOptions<TRequestBody> = {
+  body?: TRequestBody;
+  headers?: THeaders;
+};
 
 const BASE_URL = import.meta.env.VITE_REST_BASE_URL;
 
@@ -28,19 +35,20 @@ const refresh = async (): Promise<void> => {
   }
 };
 
-export const request = async <RequestBody, ResponseBody>(
-  method: string,
+export const request = async <TRequestBody, TResponseBody>(
+  method: "GET" | "POST" | "DELETE",
   path: string,
-  body?: RequestBody,
-): Promise<ResponseBody> => {
+  options?: TRequestOptions<TRequestBody>,
+): Promise<TResponseBody> => {
   const makeRequest = () =>
     fetch(url(BASE_URL, path), {
       method,
       headers: {
+        ...(options?.headers ?? {}),
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: body ? serialise(body) : undefined,
+      body: options?.body ? serialise(options.body) : undefined,
     });
 
   let response = await makeRequest();
@@ -64,14 +72,14 @@ export const request = async <RequestBody, ResponseBody>(
   }
 
   if (response.status === 204) {
-    return undefined as ResponseBody;
+    return undefined as TResponseBody;
   }
 
   const contentType = response.headers.get("content-type") ?? "";
 
   if (contentType.includes("application/json")) {
-    return response.json() as Promise<ResponseBody>;
+    return response.json() as Promise<TResponseBody>;
   }
 
-  return undefined as ResponseBody;
+  return undefined as TResponseBody;
 };

@@ -4,7 +4,7 @@ import { useModal } from "~/components/modal";
 import {
   type AccountResponse,
   getAccount,
-  healthCheck,
+  getCurrentSession,
   register,
 } from "~/services/account.service";
 import { login, type TokensResponse } from "~/services/auth.service";
@@ -23,11 +23,14 @@ export default function ModalOutlet() {
 
   function onLogin({ email, password }: LogInFields) {
     login({ email, password }).then((token: TokensResponse) => {
-      healthCheck().then((pulse) => {
-        console.log("pulse", pulse);
-      });
+      console.log("token", token);
+
       getAccount().then((account) => {
         console.log("account", account);
+      });
+
+      getCurrentSession().then((session) => {
+        console.log("session", session);
       });
     });
     closeModal();
