@@ -1,7 +1,7 @@
 import { url } from "~/util/web.util";
 import { serialise } from "~/util/json.util";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_REST_BASE_URL;
 
 let refreshPromise: Promise<void> | null = null;
 

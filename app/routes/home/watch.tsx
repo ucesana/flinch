@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 
-// const CONSUME_URL = "ws://localhost:8080/consume";
-const CONSUME_URL = "ws://localhost:8080/api/streams/live/consume";
+const CONSUME_URL = import.meta.env.VITE_STREAM_CONSUME_URL;
 
 export default function Watch() {
   const videoRef = useRef<HTMLVideoElement>(null);

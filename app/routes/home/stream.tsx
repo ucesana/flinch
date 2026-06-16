@@ -2,12 +2,11 @@ import { useEffect, useRef } from "react";
 import Button from "../../components/button";
 import { toast } from "sonner";
 
-// const INGEST_URL = "ws://localhost:8080/ingest";
-const INGEST_URL = "ws://localhost:8080/api/streams/live/ingest";
+const INGEST_URL = import.meta.env.VITE_STREAM_INGEST_URL;
+const BITS_PER_SECOND = import.meta.env.VITE_STREAM_BITS_PER_SECOND;
 
 export default function Stream() {
-  // const BITS_PER_SECOND = 100_000_000;
-  const BITS_PER_SECOND = 2_500_000; // 2.5 Mbps — sufficient for 1080p VP8
+  console.log(BITS_PER_SECOND);
   const video = useRef<HTMLVideoElement>(null);
   let mimeType: string | undefined;
 
