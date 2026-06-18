@@ -52,11 +52,3 @@ export function getCurrentSession(): Promise<SessionResponse> {
 export function revokeSession(familyId: string): Promise<void> {
   return remove(`/api/accounts/me/sessions/${familyId}`);
 }
-
-export interface PulseResponse {
-  status: string;
-}
-
-export function healthCheck(): Promise<PulseResponse> {
-  return get<PulseResponse>("/api/accounts/health");
-}

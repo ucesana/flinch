@@ -27,17 +27,6 @@ export default function ModalOutlet() {
   }
 
   async function onLogin({ email, password }: LogInFields) {
-    // login({ email, password }).then((tokens: TokensResponse) => {
-    //   console.log("tokens", tokens);
-    //
-    //   getAccount().then((account) => {
-    //     console.log("account", account);
-    //   });
-    //
-    //   getCurrentSession().then((session) => {
-    //     console.log("session", session);
-    //   });
-    // });
     const tokens = await login({ email, password });
     console.log("tokens", tokens);
     const account = await getAccount();

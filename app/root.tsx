@@ -13,6 +13,11 @@ import ModalOutlet from "~/components/modal-outlet";
 import { Toaster } from "sonner";
 import { Provider } from "react-redux";
 import { store } from "~/store/store";
+import { useEffect } from "react";
+import { getAccount, getCurrentSession } from "~/services/account.service";
+import { setIdentity } from "~/store/identitySlice";
+import { useAppDispatch } from "~/store/hooks";
+import Init from "~/components/Init";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -48,6 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Provider store={store}>
+      <Init />
       <Outlet />
       <ModalOutlet />
       <Toaster />

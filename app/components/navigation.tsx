@@ -1,5 +1,5 @@
 import FlinchLogo from "./flinch-logo";
-import { BookHeart, BookSearch, EllipsisVertical, User } from "lucide-react";
+import { BookHeart, BookSearch, EllipsisVertical } from "lucide-react";
 import Button from "./button";
 import ButtonIcon from "./button-icon";
 import ResponsiveSearchInput from "./search-input.responsive";
@@ -11,6 +11,7 @@ import { logout } from "~/services/auth.service";
 import { useAppDispatch, useAppSelector } from "~/store/hooks";
 import { removeIdentity } from "~/store/identitySlice";
 import { toast } from "sonner";
+import UserIcon from "~/components/user-icon";
 
 export default function Navigation() {
   const { openModal } = useModal<ModalType>();
@@ -32,11 +33,13 @@ export default function Navigation() {
         <FlinchLogo />
 
         <LinkResponsive label="Browse" icon={<BookSearch />} href="/" />
-        <LinkResponsive
-          label="Following"
-          icon={<BookHeart />}
-          href="/following"
-        />
+        {identity && (
+          <LinkResponsive
+            label="Following"
+            icon={<BookHeart />}
+            href="/following"
+          />
+        )}
 
         <ButtonIcon title="Options" icon={<EllipsisVertical />}>
           <Menu>
@@ -67,7 +70,11 @@ export default function Navigation() {
             </Button>
           </>
         )}
-        <ButtonIcon title="Account" icon={<User />} align="right">
+        <ButtonIcon
+          title="Account"
+          icon={<UserIcon active={!!identity} />}
+          align="right"
+        >
           <Menu>
             <a href="channel">Channel</a>
             <a href="settings">Settings</a>
