@@ -1,6 +1,6 @@
 import { useAppDispatch } from "~/store/hooks";
 import { useEffect } from "react";
-import { getAccount, getCurrentSession } from "~/services/account.service";
+import { getUser, getCurrentSession } from "~/services/users.service";
 import { removeIdentity, setIdentity } from "~/store/identitySlice";
 
 export default function Init() {
@@ -12,8 +12,8 @@ export default function Init() {
 
         if (!session) return;
 
-        const account = await getAccount();
-        dispatch(setIdentity({ account, session }));
+        const user = await getUser();
+        dispatch(setIdentity({ user, session }));
       } catch (e) {
         dispatch(removeIdentity());
       }

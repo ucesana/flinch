@@ -1,11 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type {
-  AccountResponse,
-  SessionResponse,
-} from "~/services/account.service";
+import type { UserResponse, SessionResponse } from "~/services/users.service";
 
 export type Identity = {
-  account: AccountResponse;
+  user: UserResponse;
   session: SessionResponse;
 };
 

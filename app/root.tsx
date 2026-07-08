@@ -13,10 +13,6 @@ import ModalOutlet from "~/components/modal-outlet";
 import { Toaster } from "sonner";
 import { Provider } from "react-redux";
 import { store } from "~/store/store";
-import { useEffect } from "react";
-import { getAccount, getCurrentSession } from "~/services/account.service";
-import { setIdentity } from "~/store/identitySlice";
-import { useAppDispatch } from "~/store/hooks";
 import Init from "~/components/Init";
 
 export const links: Route.LinksFunction = () => [

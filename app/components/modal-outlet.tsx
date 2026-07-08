@@ -2,11 +2,11 @@ import SignUpModal, { type SignUpFields } from "~/components/signup-modal";
 import LogInModal, { type LogInFields } from "~/components/login-modal";
 import { useModal } from "~/components/modal";
 import {
-  type AccountResponse,
-  getAccount,
+  getUser,
   getCurrentSession,
-  register,
-} from "~/services/account.service";
+  createUser,
+  type UserResponse,
+} from "~/services/users.service";
 import { login, type TokensResponse } from "~/services/auth.service";
 import { useAppDispatch } from "~/store/hooks";
 import { setIdentity } from "~/store/identitySlice";
@@ -19,8 +19,8 @@ export default function ModalOutlet() {
   const dispatch = useAppDispatch();
 
   function onSignUp({ email, password }: SignUpFields) {
-    register({ email, password }).then((account: AccountResponse) => {
-      console.log("Registered:", account);
+    createUser({ email, password }).then((user: UserResponse) => {
+      console.log("User created:", user);
       closeModal();
       openModal("login");
     });
@@ -29,11 +29,11 @@ export default function ModalOutlet() {
   async function onLogin({ email, password }: LogInFields) {
     const tokens = await login({ email, password });
     console.log("tokens", tokens);
-    const account = await getAccount();
-    console.log("account", account);
+    const user = await getUser();
+    console.log("user", user);
     const session = await getCurrentSession();
     console.log("session", session);
-    dispatch(setIdentity({ account, session }));
+    dispatch(setIdentity({ user: user, session }));
 
     closeModal();
   }
