@@ -25,10 +25,7 @@ export interface SessionResponse {
 export function createUser(
   userCreateRequest: UserCreateRequest,
 ): Promise<UserResponse> {
-  return post<UserCreateRequest, UserResponse>(
-    "/api/users/create",
-    userCreateRequest,
-  );
+  return post<UserCreateRequest, UserResponse>("/api/users", userCreateRequest);
 }
 
 export function getUser(): Promise<UserResponse> {
