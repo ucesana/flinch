@@ -36,7 +36,7 @@ const refresh = async (): Promise<void> => {
 };
 
 export const request = async <TRequestBody, TResponseBody>(
-  method: "GET" | "POST" | "DELETE",
+  method: "GET" | "POST" | "PATCH" | "DELETE",
   path: string,
   options?: TRequestOptions<TRequestBody>,
 ): Promise<TResponseBody> => {

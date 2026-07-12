@@ -11,6 +11,13 @@ export const get = <ResponseBody>(path: string): Promise<ResponseBody> => {
   return request("GET", path);
 };
 
+export const patch = <RequestBody, ResponseBody>(
+  path: string,
+  body?: RequestBody,
+): Promise<ResponseBody> => {
+  return request("PATCH", path, { body });
+};
+
 export const remove = (path: string): Promise<void> => {
   return request("DELETE", path);
 };
