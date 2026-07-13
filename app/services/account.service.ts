@@ -1,8 +1,8 @@
 import { get, post, patch } from "./rest.service";
 
 export interface AccountResponse {
-  id?: string;
-  userId?: string;
+  id: string;
+  userId: string;
   name?: string;
 }
 

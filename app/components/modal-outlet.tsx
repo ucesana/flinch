@@ -10,6 +10,12 @@ import {
 import { login, type TokensResponse } from "~/services/auth.service";
 import { useAppDispatch } from "~/store/hooks";
 import { setIdentity } from "~/store/identitySlice";
+import {
+  createAccount,
+  getAccount,
+  getMyAccounts,
+} from "~/services/account.service";
+import { createChannel } from "~/services/channel.service";
 
 export type ModalType = "signup" | "login";
 
@@ -33,6 +39,20 @@ export default function ModalOutlet() {
     console.log("user", user);
     const session = await getCurrentSession();
     console.log("session", session);
+    const accounts = await getMyAccounts();
+    if (!accounts?.length) {
+      console.log("No account found, creating it now.");
+      const name = user.email.substring(0, user.email.indexOf("@"));
+      const account = await createAccount({ name });
+      console.log("Account created:", account);
+      const channel = await createChannel({
+        accountId: account.id,
+        name,
+        description: `${name}'s channel!`,
+      });
+      console.log("Channel created:", channel);
+    }
+
     dispatch(setIdentity({ user: user, session }));
 
     closeModal();
