@@ -1,6 +1,6 @@
 import { SquareArrowLeft, SquareArrowRight } from "lucide-react";
 import { useState } from "react";
-import ButtonIcon from "./button-icon";
+import ButtonIcon from "../buttons/button-icon";
 
 type Props = {
   title: string;

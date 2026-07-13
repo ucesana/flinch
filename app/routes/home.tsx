@@ -1,8 +1,8 @@
 import type { Route } from "./+types/home";
-import Navigation from "~/components/navigation";
+import Navigation from "~/components/layout/navigation";
 import { Outlet } from "react-router";
-import SideBar from "~/components/sidebar";
-import RecommendedList from "~/components/recommended-list";
+import SideBar from "~/components/layout/sidebar";
+import RecommendedList from "~/routes/home/recommended-list";
 
 export function meta({}: Route.MetaArgs) {
   return [

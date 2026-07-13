@@ -1,30 +1,30 @@
 import { Search } from "lucide-react";
-import ButtonIcon from "./button-icon";
+import ButtonIcon from "../buttons/button-icon";
 import SearchInput from "./search-input";
 import { useEffect, useRef, useState } from "react";
 
 export default function ResponsiveSearchInput() {
-  const [open, setOpen] = useState(false);
+  const [searchInputFloat, setSearchInputFloat] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   function handleToggleSearchInput() {
-    setOpen((o) => !o);
+    setSearchInputFloat((o) => !o);
   }
 
   useEffect(() => {
-    if (!open) {
+    if (!searchInputFloat) {
       return;
     }
 
     function handleOutsideClick(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) {
-        setOpen(false);
+        setSearchInputFloat(false);
       }
     }
 
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [open]);
+  }, [searchInputFloat]);
 
   return (
     <div className="relative flex justify-end md:justify-center items-center h-full">
@@ -38,8 +38,8 @@ export default function ResponsiveSearchInput() {
           className="inline sm:hidden"
           onClick={handleToggleSearchInput}
         ></ButtonIcon>
-        {open && (
-          <div className="absolute top-full h-10 left-0 min-w-full">
+        {searchInputFloat && (
+          <div className="sm:hidden absolute top-full h-10 left-0 min-w-full">
             <SearchInput />
           </div>
         )}

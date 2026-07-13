@@ -1,9 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  type Action,
+  configureStore,
+  type ThunkAction,
+} from "@reduxjs/toolkit";
 import identityReducer from "./identitySlice";
+import accountReducer from "./accountSlice";
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
 
 export const store = configureStore({
   reducer: {
     session: identityReducer,
+    account: accountReducer,
   },
 });
 

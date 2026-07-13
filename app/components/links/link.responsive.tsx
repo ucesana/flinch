@@ -1,4 +1,4 @@
-import ButtonIcon from "./button-icon";
+import ButtonIcon from "../buttons/button-icon";
 
 type Props = {
   href?: string;

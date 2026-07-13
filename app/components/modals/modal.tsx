@@ -1,4 +1,4 @@
-import Button from "./button";
+import Button from "../buttons/button";
 import {
   useForm,
   type SubmitHandler,

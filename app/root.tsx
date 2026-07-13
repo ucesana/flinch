@@ -9,11 +9,11 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import ModalOutlet from "~/components/modal-outlet";
+import ModalOutlet from "~/components/modals/modal-outlet";
 import { Toaster } from "sonner";
 import { Provider } from "react-redux";
 import { store } from "~/store/store";
-import Init from "~/components/Init";
+import Init from "~/components/init";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -74,7 +74,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="pt-16 p-4 container mx-auto dark:text-white">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (

@@ -1,17 +1,17 @@
-import FlinchLogo from "./flinch-logo";
+import FlinchLogo from "../branding/flinch-logo";
 import { BookHeart, BookSearch, EllipsisVertical } from "lucide-react";
-import Button from "./button";
-import ButtonIcon from "./button-icon";
-import ResponsiveSearchInput from "./search-input.responsive";
-import LinkResponsive from "./link.responsive";
+import Button from "../buttons/button";
+import ButtonIcon from "../buttons/button-icon";
+import ResponsiveSearchInput from "../forms/search-input.responsive";
+import LinkResponsive from "../links/link.responsive";
 import Menu from "./menu";
-import { useModal } from "~/components/modal";
-import type { ModalType } from "~/components/modal-outlet";
+import { useModal } from "~/components/modals/modal";
+import type { ModalType } from "~/components/modals/modal-outlet";
 import { logout } from "~/services/auth.service";
 import { useAppDispatch, useAppSelector } from "~/store/hooks";
 import { removeIdentity } from "~/store/identitySlice";
 import { toast } from "sonner";
-import UserIcon from "~/components/user-icon";
+import UserIcon from "~/components/icons/user-icon";
 
 export default function Navigation() {
   const { openModal } = useModal<ModalType>();

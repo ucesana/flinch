@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import Button from "../../components/button";
+import Button from "../../components/buttons/button";
 import { toast } from "sonner";
 
 const INGEST_URL = import.meta.env.VITE_STREAM_INGEST_URL;
@@ -121,34 +121,34 @@ export default function Stream() {
   }
 
   return (
-    <div className="p-2 pl-10 pr-10">
+    <div className="flex flex-col grow min-h-0">
       <div className="camera"></div>
-      <div className="flex flex-col">
+      <div className="flex flex-col min-h-0 justify-center items-center">
         <video
           ref={video}
-          className="grow justify-center aspect-video border border-red-500 rounded-2xl"
+          className="max-h-full max-w-full aspect-video border border-red-500 rounded-2xl object-contain"
         >
           Video stream not available.
         </video>
+      </div>
 
-        <div className="shrink-0 p-2">
-          <div className="flex justify-center">
-            <Button
-              className="bg-red-600"
-              aria-description="Start Stream"
-              onClick={handleStartStream}
-            >
-              Start Stream
-            </Button>
+      <div className="shrink-0 p-2">
+        <div className="flex justify-center">
+          <Button
+            className="bg-red-600"
+            aria-description="Start Stream"
+            onClick={handleStartStream}
+          >
+            Start Stream
+          </Button>
 
-            <Button
-              className="bg-red-600"
-              aria-description="Stop Stream"
-              onClick={handleStopStream}
-            >
-              Stop Stream
-            </Button>
-          </div>
+          <Button
+            className="bg-red-600"
+            aria-description="Stop Stream"
+            onClick={handleStopStream}
+          >
+            Stop Stream
+          </Button>
         </div>
       </div>
     </div>

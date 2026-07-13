@@ -1,4 +1,4 @@
-import Card from "../../components/card";
+import Card from "../../components/cards/card";
 
 export default function Browse() {
   return (
