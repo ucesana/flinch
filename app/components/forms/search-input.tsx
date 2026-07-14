@@ -26,7 +26,6 @@ function fetchResults(terms: string): Promise<Cell[]> {
 
 export default function SearchInput() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const [selected, setSelected] = useState<Cell | null>(null);
   const [value, setValue] = useState("");
@@ -112,27 +111,23 @@ export default function SearchInput() {
         )}
 
         <div className="absolute w-64 left-0 top-full mt-1 hidden z-50 group-focus-within/search:block">
-          <div
-            ref={containerRef}
-            className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800"
-            style={{
-              width: "min(max-content, calc(100vw - 2rem))",
-            }}
-          >
-            {results.map((item) => (
-              <div
-                key={item.id}
-                className={`cursor-pointer p-2 hover:bg-gray-700 ${
-                  item.id === selected?.id ? "bg-gray-700" : ""
-                }`}
-                onMouseDown={() => updateSelected(item)}
-              >
-                <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-                  {item.title}
+          {results?.length > 0 && (
+            <div className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800">
+              {results.map((item) => (
+                <div
+                  key={item.id}
+                  className={`cursor-pointer p-2 hover:bg-gray-700 ${
+                    item.id === selected?.id ? "bg-gray-700" : ""
+                  }`}
+                  onMouseDown={() => updateSelected(item)}
+                >
+                  <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                    {item.title}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
