@@ -1,4 +1,5 @@
 import { get, post } from "./rest.service";
+import { queryString } from "~/lib/web";
 
 export interface CreateChannelRequest {
   accountId: string;
@@ -31,6 +32,11 @@ export interface ChannelSubscriptionResponse {
   bannedAt: string | null;
 }
 
+export interface ChannelFilter {
+  name?: string;
+  accountId?: string;
+}
+
 export function createChannel(
   request: CreateChannelRequest,
 ): Promise<ChannelResponse> {
@@ -41,11 +47,20 @@ export function getChannel(id: string): Promise<ChannelResponse> {
   return get<ChannelResponse>(`/api/channels/${id}`);
 }
 
-export function listChannels(accountId?: string): Promise<ChannelResponse[]> {
+export function listChannelsForAccount(
+  accountId?: string,
+): Promise<ChannelResponse[]> {
   const path = accountId
     ? `/api/channels?accountId=${encodeURIComponent(accountId)}`
     : "/api/channels";
 
+  return get<ChannelResponse[]>(path);
+}
+
+export function listChannelsByFilter(
+  filter: ChannelFilter,
+): Promise<ChannelResponse[]> {
+  const path = `/api/channels?${queryString(filter)}`;
   return get<ChannelResponse[]>(path);
 }
 

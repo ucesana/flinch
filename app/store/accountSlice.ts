@@ -4,7 +4,10 @@ import {
   type AccountResponse,
   getMyAccounts,
 } from "~/services/account.service";
-import { type ChannelResponse, listChannels } from "~/services/channel.service";
+import {
+  type ChannelResponse,
+  listChannelsForAccount,
+} from "~/services/channel.service";
 import type { AppThunk } from "~/store/store";
 
 export type Account = {
@@ -78,7 +81,7 @@ export const loadChannels =
       return;
     }
 
-    const channels = await listChannels(account.account.id);
+    const channels = await listChannelsForAccount(account.account.id);
 
     dispatch(
       setChannels({

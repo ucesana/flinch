@@ -13,7 +13,10 @@ import { login } from "~/services/auth.service";
 import { useAppDispatch } from "~/store/hooks";
 import { setIdentity } from "~/store/identitySlice";
 import { createAccount, getMyAccounts } from "~/services/account.service";
-import { createChannel, listChannels } from "~/services/channel.service";
+import {
+  createChannel,
+  listChannelsForAccount,
+} from "~/services/channel.service";
 import { setAccount, setChannels } from "~/store/accountSlice";
 
 export type ModalType = "signup" | "login";
@@ -53,7 +56,7 @@ export default function ModalOutlet() {
     const account = accounts[0]; // Assume the primary account has index 0.
 
     // init channels
-    const channels = await listChannels(account.id);
+    const channels = await listChannelsForAccount(account.id);
     if (!channels?.length) {
       console.log("No channel found, creating it now.");
       const channel = await createChannel({

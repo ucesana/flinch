@@ -20,3 +20,28 @@ export const url = (host: string, ...paths: string[]): string => {
 
   return [normalizedHost, ...normalizedPaths].join("/");
 };
+
+export function queryString(object: any): string {
+  if (!object) {
+    return "";
+  }
+
+  const params = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(object)) {
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => params.append(key, item));
+    } else {
+      if (typeof value === "string") {
+        params.append(key, value);
+      }
+    }
+  }
+
+  const query = params.toString();
+  return query ? query : "";
+}
