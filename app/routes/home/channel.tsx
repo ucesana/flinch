@@ -17,14 +17,16 @@ export default function Channel() {
   const channel = channels?.length ? channels[0] : null;
 
   return (
-    <div className="p-4 h-full flex flex-col min-h-0">
-      <div className="flex items-center gap-2 pb-4 shrink-0">
-        <RoundIcon backgroundColor="bg-red-600">
-          <User className="text-white size-8" />
-        </RoundIcon>
-        {channel && <h1>{channel?.name ?? ""}</h1>}
+    channel && (
+      <div className="p-4 h-full flex flex-col min-h-0">
+        <div className="flex items-center gap-2 pb-4 shrink-0">
+          <RoundIcon backgroundColor="bg-red-600">
+            <User className="text-white size-8" />
+          </RoundIcon>
+          <h1>{channel.name ?? ""}</h1>
+        </div>
+        <Stream channel={channel}></Stream>
       </div>
-      <Stream></Stream>
-    </div>
+    )
   );
 }

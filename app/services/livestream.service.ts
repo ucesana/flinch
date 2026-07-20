@@ -48,6 +48,10 @@ export function listStreams(channelId: string): Promise<LiveStreamResponse[]> {
   );
 }
 
+export function browseStreams(): Promise<LiveStreamResponse[]> {
+  return get<LiveStreamResponse[]>("/api/livestreams/browse");
+}
+
 export function startStream(id: string): Promise<void> {
   return post<void, void>(`/api/livestreams/${id}/start`);
 }

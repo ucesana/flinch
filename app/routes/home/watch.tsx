@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "react-router";
 
 const CONSUME_URL = import.meta.env.VITE_STREAM_CONSUME_URL;
 
 export default function Watch() {
+  const [searchParams] = useSearchParams();
+  const streamId = searchParams.get("streamId");
+
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  function connect() {
+  function connect(streamId: string) {
     const video: HTMLVideoElement | null = videoRef.current;
 
     if (video) {
@@ -102,7 +106,9 @@ export default function Watch() {
           console.error("Video error:", video.error);
         });
 
-        const ws = new WebSocket(CONSUME_URL);
+        const ws = new WebSocket(
+          CONSUME_URL.replaceAll("{streamId}", streamId),
+        );
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => console.log("ws open");
@@ -145,8 +151,11 @@ export default function Watch() {
     }
   }
   useEffect(() => {
-    connect();
-  });
+    if (!streamId) {
+      return;
+    }
+    connect(streamId);
+  }, [streamId]);
 
   return (
     <div className="pt-4">

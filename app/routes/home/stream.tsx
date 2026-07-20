@@ -1,14 +1,21 @@
 import { useEffect, useRef } from "react";
 import Button from "../../components/buttons/button";
 import { toast } from "sonner";
+import {
+  createStream,
+  startStream,
+  stopStream,
+} from "~/services/livestream.service";
+import type { ChannelResponse } from "~/services/channel.service";
 
 const INGEST_URL = import.meta.env.VITE_STREAM_INGEST_URL;
 const BITS_PER_SECOND = import.meta.env.VITE_STREAM_BITS_PER_SECOND;
 
-export default function Stream() {
+export default function Stream({ channel }: { channel: ChannelResponse }) {
   console.log(BITS_PER_SECOND);
   const video = useRef<HTMLVideoElement>(null);
   let mimeType: string | undefined;
+  let streamId: string | undefined;
 
   let recorder: MediaRecorder;
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function Stream() {
   }
 
   function connectProducer(stream: MediaStream) {
-    const ws = new WebSocket(INGEST_URL);
+    const ws = new WebSocket(INGEST_URL.replaceAll("{streamId}", streamId));
     ws.binaryType = "arraybuffer";
 
     ws.onopen = () => {
@@ -85,7 +92,7 @@ export default function Stream() {
 
   let stream: MediaStream | undefined;
 
-  function handleStartStream() {
+  function startStreamCapture() {
     const v = video.current;
     if (!v) {
       return;
@@ -112,11 +119,34 @@ export default function Stream() {
       });
   }
 
-  function handleStopStream() {
+  async function handleStartStream() {
+    if (!streamId) {
+      const stream = await createStream({
+        channelId: channel.id,
+        name: channel.name,
+        description: channel.description,
+      });
+      console.log("created stream: ", stream);
+      streamId = stream.id;
+    }
+    await startStream(streamId);
+    console.log("started stream ", streamId);
+    startStreamCapture();
+  }
+
+  function stopStreamCapture() {
     const v = video.current;
     if (stream && v) {
       stream.getTracks().forEach((track) => track.stop());
       v.srcObject = null;
+    }
+  }
+
+  async function handleStopStream() {
+    stopStreamCapture();
+    if (streamId) {
+      await stopStream(streamId);
+      console.log("stopped stream ", streamId);
     }
   }
 
