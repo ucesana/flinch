@@ -36,19 +36,25 @@ const refresh = async (): Promise<void> => {
 };
 
 export const request = async <TRequestBody, TResponseBody>(
-  method: "GET" | "POST" | "PATCH" | "DELETE",
+  method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE",
   path: string,
   options?: TRequestOptions<TRequestBody>,
 ): Promise<TResponseBody> => {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers ?? {}),
+  };
+
   const makeRequest = () =>
     fetch(url(BASE_URL, path), {
       method,
-      headers: {
-        ...(options?.headers ?? {}),
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
-      body: options?.body ? serialise(options.body) : undefined,
+      body: options?.body
+        ? hasContentType(headers, "application/json")
+          ? serialise(options.body)
+          : (options.body as unknown as Blob)
+        : undefined,
     });
 
   let response = await makeRequest();
@@ -81,5 +87,17 @@ export const request = async <TRequestBody, TResponseBody>(
     return response.json() as Promise<TResponseBody>;
   }
 
+  if (contentType.includes("image")) {
+    return response.blob() as Promise<TResponseBody>;
+  }
+
   return undefined as TResponseBody;
 };
+
+function hasContentType(headers: THeaders, contentType: string): boolean {
+  console.log("headers ", headers);
+  if (headers) {
+    return headers["Content-Type"] === contentType;
+  }
+  return false;
+}

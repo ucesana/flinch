@@ -5,6 +5,7 @@ import {
   createStream,
   startStream,
   stopStream,
+  updateThumbnail,
 } from "~/services/livestream.service";
 import type { ChannelResponse } from "~/services/channel.service";
 
@@ -13,11 +14,14 @@ const BITS_PER_SECOND = import.meta.env.VITE_STREAM_BITS_PER_SECOND;
 
 export default function Stream({ channel }: { channel: ChannelResponse }) {
   console.log(BITS_PER_SECOND);
-  const video = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const thumbnailCaptured = useRef(false);
+
   let mimeType: string | undefined;
   let streamId: string | undefined;
 
   let recorder: MediaRecorder;
+
   useEffect(() => {
     const types = [
       "video/webm;codecs=vp8,opus",
@@ -58,13 +62,28 @@ export default function Stream({ channel }: { channel: ChannelResponse }) {
     };
 
     recorder.onerror = (e) => console.error("Recorder error:", e);
-    recorder.onstart = () => console.log("Recorder started");
+    recorder.onstart = () => handleRecorderOnStart();
     recorder.onstop = () => console.log("Recorder stopped");
 
     // Signal new session to server
     ws.send(JSON.stringify({ type: "stream_start" }));
 
     recorder.start(1000);
+  }
+
+  async function handleRecorderOnStart() {
+    console.log("Recorder started");
+
+    const video: HTMLVideoElement | null = videoRef.current;
+    console.log("Attempting to capture thumbnail");
+    if (video && streamId) {
+      const blob = await captureStreamThumbnail(video, {
+        width: video.videoWidth * 0.5,
+        height: video.videoHeight * 0.5,
+      });
+      console.log("Got a blob, let's update");
+      await updateThumbnail(streamId, blob, "image/jpeg");
+    }
   }
 
   function connectProducer(stream: MediaStream) {
@@ -93,7 +112,7 @@ export default function Stream({ channel }: { channel: ChannelResponse }) {
   let stream: MediaStream | undefined;
 
   function startStreamCapture() {
-    const v = video.current;
+    const v = videoRef.current;
     if (!v) {
       return;
     }
@@ -135,7 +154,7 @@ export default function Stream({ channel }: { channel: ChannelResponse }) {
   }
 
   function stopStreamCapture() {
-    const v = video.current;
+    const v = videoRef.current;
     if (stream && v) {
       stream.getTracks().forEach((track) => track.stop());
       v.srcObject = null;
@@ -150,12 +169,50 @@ export default function Stream({ channel }: { channel: ChannelResponse }) {
     }
   }
 
+  function captureStreamThumbnail(
+    video: HTMLVideoElement,
+    options?: { width?: number; height?: number },
+  ): Promise<Blob> {
+    console.log("Capture stream thumbnail");
+
+    if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+      throw new Error("Video does not have a frame available yet");
+    }
+
+    const canvas: HTMLCanvasElement = document.createElement("canvas");
+
+    canvas.width = options?.width ?? video.videoWidth;
+    canvas.height = options?.height ?? video.videoHeight;
+
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error("Could not create canvas context");
+    }
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error("Could not create image blob"));
+          }
+        },
+        "image/jpeg",
+        0.85,
+      );
+    });
+  }
+
   return (
     <div className="flex flex-col grow min-h-0">
       <div className="camera"></div>
       <div className="flex flex-col min-h-0 justify-center items-center">
         <video
-          ref={video}
+          ref={videoRef}
           className="max-h-full max-w-full aspect-video border border-red-500 rounded-2xl object-contain"
         >
           Video stream not available.
